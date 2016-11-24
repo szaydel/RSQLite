@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A sample sqlite database. — datasetsDb • RSQLite</title>
+<title>A sample sqlite database — datasetsDb • RSQLite</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -49,7 +49,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../articles/RSQLite.html">Documentation</a>
+  <a href="../articles/RSQLite.html">Intro</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -77,7 +77,7 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A sample sqlite database.</h1>
+    <h1>A sample sqlite database</h1>
     </div>
 
     
@@ -90,7 +90,7 @@ in the datasets package.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>DBI</span>)
-<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'>datasetsDb</span>()
+<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw'>RSQLite</span><span class='kw'>::</span><span class='fu'>datasetsDb</span>()
 <span class='fu'>dbListTables</span>(<span class='no'>db</span>)</div><div class='output co'>#&gt;  [1] &quot;BOD&quot;              &quot;CO2&quot;              &quot;ChickWeight&quot;      &quot;DNase&quot;           
 #&gt;  [5] &quot;Formaldehyde&quot;     &quot;Indometh&quot;         &quot;InsectSprays&quot;     &quot;LifeCycleSavings&quot;
 #&gt;  [9] &quot;Loblolly&quot;         &quot;Orange&quot;           &quot;OrchardSprays&quot;    &quot;PlantGrowth&quot;     

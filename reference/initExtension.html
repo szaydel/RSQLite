@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add useful extension functions. — initExtension • RSQLite</title>
+<title>Add useful extension functions — initExtension • RSQLite</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -49,7 +49,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../articles/RSQLite.html">Documentation</a>
+  <a href="../articles/RSQLite.html">Intro</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -77,7 +77,7 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add useful extension functions.</h1>
+    <h1>Add useful extension functions</h1>
     </div>
 
     
@@ -90,7 +90,7 @@ through the SQLite website (<a href = 'http://www.sqlite.org/contrib'>http://www
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>db</dt>
-      <dd>A database to load these extensions.</dd>
+      <dd>A SQLiteConnection object to load these extensions into.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="available-extension-functions"><a class="anchor" href="#available-extension-functions"></a>Available extension functions</h2>
@@ -109,11 +109,11 @@ upper_quartile</dd>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>DBI</span>)
-<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='SQLite.html'>SQLite</a></span>())
-<span class='fu'>initExtension</span>(<span class='no'>db</span>)
+<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw'>RSQLite</span><span class='kw'>::</span><span class='fu'><a href='datasetsDb.html'>datasetsDb</a></span>()
+<span class='kw'>RSQLite</span><span class='kw'>::</span><span class='fu'>initExtension</span>(<span class='no'>db</span>)
 
-<span class='fu'>dbWriteTable</span>(<span class='no'>db</span>, <span class='st'>"mtcars"</span>, <span class='no'>mtcars</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='reexports.html'>dbGetQuery</a></span>(<span class='no'>db</span>, <span class='st'>"SELECT stdev(mpg) FROM mtcars"</span>)</div><div class='output co'>#&gt;   stdev(mpg)
-#&gt; 1   6.026948</div><div class='input'><span class='fu'>sd</span>(<span class='no'>mtcars</span>$<span class='no'>mpg</span>)</div><div class='output co'>#&gt; [1] 6.026948</div></pre>
+<span class='fu'><a href='reexports.html'>dbGetQuery</a></span>(<span class='no'>db</span>, <span class='st'>"SELECT stdev(mpg) FROM mtcars"</span>)</div><div class='output co'>#&gt;   stdev(mpg)
+#&gt; 1   6.026948</div><div class='input'><span class='fu'>sd</span>(<span class='no'>mtcars</span>$<span class='no'>mpg</span>)</div><div class='output co'>#&gt; [1] 6.026948</div><div class='input'><span class='fu'>dbDisconnect</span>(<span class='no'>db</span>)</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

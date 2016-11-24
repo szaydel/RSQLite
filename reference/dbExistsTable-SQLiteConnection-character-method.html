@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Does the table exist? — dbExistsTable,SQLiteConnection,character-method • RSQLite</title>
+<title>Tables in a database — dbExistsTable,SQLiteConnection,character-method • RSQLite</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -49,7 +49,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../articles/RSQLite.html">Documentation</a>
+  <a href="../articles/RSQLite.html">Intro</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -77,15 +77,19 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Does the table exist?</h1>
+    <h1>Tables in a database</h1>
     </div>
 
     
-    <p>Does the table exist?</p>
+    <p><code>dbExistsTable()</code> returns a logical that indicates if a table exists,
+<code>dbListTables()</code> lists all tables as a character vector.</p>
     
 
     <pre><span class='co'># S4 method for SQLiteConnection,character</span>
-<span class='fu'>dbExistsTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>dbExistsTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for SQLiteConnection</span>
+<span class='fu'>dbListTables</span>(<span class='no'>conn</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
@@ -94,16 +98,40 @@
       <dt>name</dt>
       <dd>String, name of table. Match is case insensitive.</dd>
       <dt>...</dt>
-      <dd>Needed for compatibility with generic. Otherwise ignored.</dd>
+      <dd>Needed for compatibility with generics, otherwise ignored.</dd>
     </dl>
     
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
+    <p>The corresponding generic functions <code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbExistsTable'>DBI::dbExistsTable()</a></code> and <code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbListTables'>DBI::dbListTables()</a></code>.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>DBI</span>)
+<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw'>RSQLite</span><span class='kw'>::</span><span class='fu'><a href='datasetsDb.html'>datasetsDb</a></span>()
+
+<span class='fu'>dbExistsTable</span>(<span class='no'>db</span>, <span class='st'>"mtcars"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>dbExistsTable</span>(<span class='no'>db</span>, <span class='st'>"nonexistingtable"</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>dbListTables</span>(<span class='no'>db</span>)</div><div class='output co'>#&gt;  [1] &quot;BOD&quot;              &quot;CO2&quot;              &quot;ChickWeight&quot;      &quot;DNase&quot;           
+#&gt;  [5] &quot;Formaldehyde&quot;     &quot;Indometh&quot;         &quot;InsectSprays&quot;     &quot;LifeCycleSavings&quot;
+#&gt;  [9] &quot;Loblolly&quot;         &quot;Orange&quot;           &quot;OrchardSprays&quot;    &quot;PlantGrowth&quot;     
+#&gt; [13] &quot;Puromycin&quot;        &quot;Theoph&quot;           &quot;ToothGrowth&quot;      &quot;USArrests&quot;       
+#&gt; [17] &quot;USJudgeRatings&quot;   &quot;airquality&quot;       &quot;anscombe&quot;         &quot;attenu&quot;          
+#&gt; [21] &quot;attitude&quot;         &quot;cars&quot;             &quot;chickwts&quot;         &quot;esoph&quot;           
+#&gt; [25] &quot;faithful&quot;         &quot;freeny&quot;           &quot;infert&quot;           &quot;iris&quot;            
+#&gt; [29] &quot;longley&quot;          &quot;morley&quot;           &quot;mtcars&quot;           &quot;npk&quot;             
+#&gt; [33] &quot;pressure&quot;         &quot;quakes&quot;           &quot;randu&quot;            &quot;rock&quot;            
+#&gt; [37] &quot;sleep&quot;            &quot;stackloss&quot;        &quot;swiss&quot;            &quot;trees&quot;           
+#&gt; [41] &quot;warpbreaks&quot;       &quot;women&quot;           </div><div class='input'>
+<span class='fu'>dbDisconnect</span>(<span class='no'>db</span>)</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

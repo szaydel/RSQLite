@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Deprecated querying tools — query-dep • RSQLite</title>
+<title>Deprecated querying tools — dbSendPreparedQuery • RSQLite</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -49,7 +49,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../articles/RSQLite.html">Documentation</a>
+  <a href="../articles/RSQLite.html">Intro</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -86,16 +86,28 @@
 or with calling <code>dbBind()</code> instead.</p>
     
 
-    <pre><span class='co'># S4 method for SQLiteConnection,character,data.frame</span>
-<span class='fu'><a href='dbSendPreparedQuery.html'>dbSendPreparedQuery</a></span>(<span class='no'>conn</span>,
+    <pre><span class='fu'>dbSendPreparedQuery</span>(<span class='no'>conn</span>, <span class='no'>statement</span>, <span class='no'>bind.data</span>, <span class='no'>...</span>)
+
+<span class='fu'>dbGetPreparedQuery</span>(<span class='no'>conn</span>, <span class='no'>statement</span>, <span class='no'>bind.data</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for SQLiteConnection,character,data.frame</span>
+<span class='fu'>dbSendPreparedQuery</span>(<span class='no'>conn</span>,
   <span class='no'>statement</span>, <span class='no'>bind.data</span>, <span class='no'>...</span>)
 
 <span class='co'># S4 method for SQLiteConnection,character,data.frame</span>
-<span class='fu'><a href='dbSendPreparedQuery.html'>dbGetPreparedQuery</a></span>(<span class='no'>conn</span>,
+<span class='fu'>dbGetPreparedQuery</span>(<span class='no'>conn</span>,
   <span class='no'>statement</span>, <span class='no'>bind.data</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
+      <dt>conn</dt>
+      <dd>A <code>DBIConnection</code> object.</dd>
+      <dt>statement</dt>
+      <dd>A SQL string</dd>
+      <dt>bind.data</dt>
+      <dd>A data frame</dd>
+      <dt>...</dt>
+      <dd>Other arguments used by methods</dd>
       <dt>bind.data</dt>
       <dd>A data frame of data to be bound.</dd>
     </dl>

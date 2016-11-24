@@ -49,7 +49,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../articles/RSQLite.html">Documentation</a>
+  <a href="../articles/RSQLite.html">Intro</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -81,7 +81,7 @@
     </div>
 
     
-    <p>This function copies a database connection to a file or to another database
+    <p>Copies a database connection to a file or to another database
 connection.  It can be used to save an in-memory database (created using
 <code>dbname = &quot;:memory:&quot;</code> or
 <code>dbname = &quot;file::memory:&quot;</code>) to a file or to create an in-memory database
@@ -109,10 +109,13 @@ a copy of anothe database.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Copy the built in databaseDb() to an in memory dataset</span>
-<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='kw'>RSQLite</span><span class='kw'>::</span><span class='fu'><a href='SQLite.html'>SQLite</a></span>(), <span class='st'>":memory:"</span>)
-<span class='fu'>sqliteCopyDatabase</span>(<span class='fu'><a href='datasetsDb.html'>datasetsDb</a></span>(), <span class='no'>db</span>)
-<span class='fu'>dbListTables</span>(<span class='no'>db</span>)</div><div class='output co'>#&gt;  [1] &quot;BOD&quot;              &quot;CO2&quot;              &quot;ChickWeight&quot;      &quot;DNase&quot;           
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>DBI</span>)
+<span class='co'># Copy the built in databaseDb() to an in-memory database</span>
+<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='kw'>RSQLite</span><span class='kw'>::</span><span class='fu'><a href='SQLite.html'>SQLite</a></span>(), <span class='st'>":memory:"</span>)
+<span class='fu'>dbListTables</span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; character(0)</div><div class='input'>
+<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw'>RSQLite</span><span class='kw'>::</span><span class='fu'><a href='datasetsDb.html'>datasetsDb</a></span>()
+<span class='kw'>RSQLite</span><span class='kw'>::</span><span class='fu'>sqliteCopyDatabase</span>(<span class='no'>db</span>, <span class='no'>con</span>)
+<span class='fu'>dbDisconnect</span>(<span class='no'>db</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>dbListTables</span>(<span class='no'>con</span>)</div><div class='output co'>#&gt;  [1] &quot;BOD&quot;              &quot;CO2&quot;              &quot;ChickWeight&quot;      &quot;DNase&quot;           
 #&gt;  [5] &quot;Formaldehyde&quot;     &quot;Indometh&quot;         &quot;InsectSprays&quot;     &quot;LifeCycleSavings&quot;
 #&gt;  [9] &quot;Loblolly&quot;         &quot;Orange&quot;           &quot;OrchardSprays&quot;    &quot;PlantGrowth&quot;     
 #&gt; [13] &quot;Puromycin&quot;        &quot;Theoph&quot;           &quot;ToothGrowth&quot;      &quot;USArrests&quot;       
@@ -122,7 +125,8 @@ a copy of anothe database.</p>
 #&gt; [29] &quot;longley&quot;          &quot;morley&quot;           &quot;mtcars&quot;           &quot;npk&quot;             
 #&gt; [33] &quot;pressure&quot;         &quot;quakes&quot;           &quot;randu&quot;            &quot;rock&quot;            
 #&gt; [37] &quot;sleep&quot;            &quot;stackloss&quot;        &quot;swiss&quot;            &quot;trees&quot;           
-#&gt; [41] &quot;warpbreaks&quot;       &quot;women&quot;           </div></pre>
+#&gt; [41] &quot;warpbreaks&quot;       &quot;women&quot;           </div><div class='input'>
+<span class='fu'>dbDisconnect</span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

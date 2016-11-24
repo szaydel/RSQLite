@@ -16,7 +16,7 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
-  <a href="../articles/RSQLite.html">Documentation</a>
+  <a href="../articles/RSQLite.html">Intro</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -41,7 +41,7 @@
       <h1>RSQLite</h1>
                         <h4 class="author">Hadley Wickham</h4>
             
-            <h4 class="date">2016-11-16</h4>
+            <h4 class="date">2016-11-24</h4>
           </div>
 
     
@@ -126,7 +126,28 @@ while (!<span class="kw">dbHasCompleted</span>(rs)) {
 <span class="co">#&gt; [1] 4</span>
 <span class="kw">dbBind</span>(rs, <span class="dt">param =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="dv">4</span>))
 <span class="kw">nrow</span>(<span class="kw">dbFetch</span>(rs))
-<span class="co">#&gt; [1] 0</span></code></pre></div>
+<span class="co">#&gt; [1] 0</span>
+<span class="kw">dbClearResult</span>(rs)
+<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<p>You can also pass multiple parameters in one call to <code>dbBind()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(mydb, <span class="st">'SELECT * FROM iris WHERE "Sepal.Length" = :x'</span>)
+<span class="kw">dbBind</span>(rs, <span class="dt">param =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="kw">seq</span>(<span class="dv">4</span>, <span class="fl">4.4</span>, <span class="dt">by =</span> <span class="fl">0.1</span>)))
+<span class="kw">nrow</span>(<span class="kw">dbFetch</span>(rs))
+<span class="co">#&gt; [1] 4</span>
+<span class="kw">dbClearResult</span>(rs)
+<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+</div>
+<div id="statements" class="section level2">
+<h2 class="hasAnchor"><html><body><a href="#statements" class="anchor"> </a></body></html>Statements</h2>
+<p>DBI has new functions <code>dbSendStatement()</code> and <code>dbExecute()</code>, which are the counterparts of <code>dbSendQuery()</code> and <code><a href="../reference/reexports.html">dbGetQuery()</a></code> for SQL statements that do not return a tabular result, such as inserting records into a table, updating a table, or setting engine parameters. It is good practice, although currently not enforced, to use the new functions when you don&rsquo;t expect a result.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dbExecute</span>(mydb, <span class="st">'DELETE FROM iris WHERE "Sepal.Length" &lt; 4'</span>)
+<span class="co">#&gt; [1] 0</span>
+rs &lt;-<span class="st"> </span><span class="kw">dbSendStatement</span>(mydb, <span class="st">'DELETE FROM iris WHERE "Sepal.Length" &lt; :x'</span>)
+<span class="kw">dbBind</span>(rs, <span class="dt">param =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="fl">4.5</span>))
+<span class="kw">dbGetRowsAffected</span>(rs)
+<span class="co">#&gt; [1] 4</span>
+<span class="kw">dbClearResult</span>(rs)
+<span class="co">#&gt; [1] TRUE</span></code></pre></div>
 </div>
 </div>
   </div>
@@ -139,6 +160,7 @@ while (!<span class="kw">dbHasCompleted</span>(rs)) {
       <li><a href="#queries">Queries</a></li>
       <li><a href="#batched-queries">Batched queries</a></li>
       <li><a href="#multiple-parameterised-queries">Multiple parameterised queries</a></li>
+      <li><a href="#statements">Statements</a></li>
       </ul></div>
       </div>
 

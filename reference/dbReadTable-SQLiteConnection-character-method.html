@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convenience functions for importing/exporting DBMS tables — dbReadTable,SQLiteConnection,character-method • RSQLite</title>
+<title>Read a database table — dbReadTable,SQLiteConnection,character-method • RSQLite</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -49,7 +49,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../articles/RSQLite.html">Documentation</a>
+  <a href="../articles/RSQLite.html">Intro</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -77,13 +77,11 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convenience functions for importing/exporting DBMS tables</h1>
+    <h1>Read a database table</h1>
     </div>
 
     
-    <p>These functions mimic their R/S-Plus counterpart <code>get</code>, <code>assign</code>,
-<code>exists</code>, <code>remove</code>, and <code>objects</code>, except that they generate
-code that gets remotely executed in a database engine.</p>
+    <p>Returns the contents of a database table given by name as a data frame.</p>
     
 
     <pre><span class='co'># S4 method for SQLiteConnection,character</span>
@@ -116,26 +114,29 @@ For backward compatibility, <code>NULL</code> is equivalent to <code>FALSE</code
       <dd>If <code>TRUE</code>, the default, column names will be
 converted to valid R identifiers.</dd>
       <dt>select.cols</dt>
-      <dd>A SQL statement (in the form of a character vector of
-length 1) giving the columns to select. E.g. &quot;*&quot; selects all columns,
-&quot;x,y,z&quot; selects three columns named as listed.</dd>
+      <dd>A SQL expression (in the form of a character vector of
+length 1) giving the columns to select. E.g. <code>&quot;*&quot;</code> selects all columns,
+<code>&quot;x, y, z&quot;</code> selects three columns named as listed.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame in the case of <code>dbReadTable()</code>; otherwise a logical
-indicating whether the operation was successful.</p>
+    <p>A data frame.</p>
     
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Note that the data.frame returned by <code>dbReadTable</code> only has
+    <p>Note that the data frame returned by <code>dbReadTable()</code> only has
 primitive data, e.g., it does not coerce character data to factors.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p>The corresponding generic function <code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbReadTable'>DBI::dbReadTable()</a></code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>DBI</span>)
-<span class='no'>con</span> <span class='kw'>&lt;-</span> <span class='fu'>dbConnect</span>(<span class='fu'><a href='SQLite.html'>SQLite</a></span>())
-<span class='fu'>dbWriteTable</span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>, <span class='no'>mtcars</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>dbReadTable</span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>)</div><div class='output co'>#&gt;                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+<span class='no'>db</span> <span class='kw'>&lt;-</span> <span class='kw'>RSQLite</span><span class='kw'>::</span><span class='fu'><a href='datasetsDb.html'>datasetsDb</a></span>()
+<span class='fu'>dbReadTable</span>(<span class='no'>db</span>, <span class='st'>"mtcars"</span>)</div><div class='output co'>#&gt;                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
 #&gt; Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
 #&gt; Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
 #&gt; Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
@@ -145,19 +146,7 @@ primitive data, e.g., it does not coerce character data to factors.</p>
 #&gt; Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
 #&gt; Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
 #&gt; Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
-#&gt;  [ reached getOption(&quot;max.print&quot;) -- omitted 23 rows ]</div><div class='input'><span class='fu'><a href='reexports.html'>dbGetQuery</a></span>(<span class='no'>con</span>, <span class='st'>"SELECT * FROM mtcars WHERE cyl = 8"</span>)</div><div class='output co'>#&gt;                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-#&gt; Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
-#&gt; Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
-#&gt; Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
-#&gt; Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
-#&gt; Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
-#&gt; Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
-#&gt; Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
-#&gt; Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
-#&gt; Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
-#&gt;  [ reached getOption(&quot;max.print&quot;) -- omitted 5 rows ]</div><div class='input'>
-<span class='co'># Supress row names</span>
-<span class='fu'>dbReadTable</span>(<span class='no'>con</span>, <span class='st'>"mtcars"</span>, <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;              row_names  mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+#&gt;  [ reached getOption(&quot;max.print&quot;) -- omitted 23 rows ]</div><div class='input'><span class='fu'>dbReadTable</span>(<span class='no'>db</span>, <span class='st'>"mtcars"</span>, <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;              row_names  mpg cyl  disp  hp drat    wt  qsec vs am gear carb
 #&gt; 1            Mazda RX4 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
 #&gt; 2        Mazda RX4 Wag 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
 #&gt; 3           Datsun 710 22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
@@ -166,17 +155,71 @@ primitive data, e.g., it does not coerce character data to factors.</p>
 #&gt; 6              Valiant 18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
 #&gt; 7           Duster 360 14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
 #&gt; 8            Merc 240D 24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
-#&gt;  [ reached getOption(&quot;max.print&quot;) -- omitted 24 rows ]</div><div class='input'><span class='fu'><a href='reexports.html'>dbGetQuery</a></span>(<span class='no'>con</span>, <span class='st'>"SELECT * FROM mtcars WHERE cyl = 8"</span>, <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;              row_names  mpg cyl  disp  hp drat    wt  qsec vs am gear carb
-#&gt; 1    Hornet Sportabout 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
-#&gt; 2           Duster 360 14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
-#&gt; 3           Merc 450SE 16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
-#&gt; 4           Merc 450SL 17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
-#&gt; 5          Merc 450SLC 15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
-#&gt; 6   Cadillac Fleetwood 10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
-#&gt; 7  Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
-#&gt; 8    Chrysler Imperial 14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
-#&gt;  [ reached getOption(&quot;max.print&quot;) -- omitted 6 rows ]</div><div class='input'>
-<span class='fu'>dbDisconnect</span>(<span class='no'>con</span>)</div><div class='output co'>#&gt; [1] TRUE</div></pre>
+#&gt;  [ reached getOption(&quot;max.print&quot;) -- omitted 24 rows ]</div><div class='input'><span class='fu'>dbReadTable</span>(<span class='no'>db</span>, <span class='st'>"mtcars"</span>, <span class='kw'>select.cols</span> <span class='kw'>=</span> <span class='st'>"cyl, gear"</span>)</div><div class='output co'>#&gt;    cyl gear
+#&gt; 1    6    4
+#&gt; 2    6    4
+#&gt; 3    4    4
+#&gt; 4    6    3
+#&gt; 5    8    3
+#&gt; 6    6    3
+#&gt; 7    8    3
+#&gt; 8    4    4
+#&gt; 9    4    4
+#&gt; 10   6    4
+#&gt; 11   6    4
+#&gt; 12   8    3
+#&gt; 13   8    3
+#&gt; 14   8    3
+#&gt; 15   8    3
+#&gt; 16   8    3
+#&gt; 17   8    3
+#&gt; 18   4    4
+#&gt; 19   4    4
+#&gt; 20   4    4
+#&gt; 21   4    3
+#&gt; 22   8    3
+#&gt; 23   8    3
+#&gt; 24   8    3
+#&gt; 25   8    3
+#&gt; 26   4    4
+#&gt; 27   4    5
+#&gt; 28   4    5
+#&gt; 29   8    5
+#&gt; 30   6    5
+#&gt; 31   8    5
+#&gt; 32   4    4</div><div class='input'><span class='fu'>dbReadTable</span>(<span class='no'>db</span>, <span class='st'>"mtcars"</span>, <span class='kw'>select.cols</span> <span class='kw'>=</span> <span class='st'>"row_names, cyl, gear"</span>)</div><div class='output co'>#&gt;                     cyl gear
+#&gt; Mazda RX4             6    4
+#&gt; Mazda RX4 Wag         6    4
+#&gt; Datsun 710            4    4
+#&gt; Hornet 4 Drive        6    3
+#&gt; Hornet Sportabout     8    3
+#&gt; Valiant               6    3
+#&gt; Duster 360            8    3
+#&gt; Merc 240D             4    4
+#&gt; Merc 230              4    4
+#&gt; Merc 280              6    4
+#&gt; Merc 280C             6    4
+#&gt; Merc 450SE            8    3
+#&gt; Merc 450SL            8    3
+#&gt; Merc 450SLC           8    3
+#&gt; Cadillac Fleetwood    8    3
+#&gt; Lincoln Continental   8    3
+#&gt; Chrysler Imperial     8    3
+#&gt; Fiat 128              4    4
+#&gt; Honda Civic           4    4
+#&gt; Toyota Corolla        4    4
+#&gt; Toyota Corona         4    3
+#&gt; Dodge Challenger      8    3
+#&gt; AMC Javelin           8    3
+#&gt; Camaro Z28            8    3
+#&gt; Pontiac Firebird      8    3
+#&gt; Fiat X1-9             4    4
+#&gt; Porsche 914-2         4    5
+#&gt; Lotus Europa          4    5
+#&gt; Ford Pantera L        8    5
+#&gt; Ferrari Dino          6    5
+#&gt; Maserati Bora         8    5
+#&gt; Volvo 142E            4    4</div><div class='input'><span class='fu'>dbDisconnect</span>(<span class='no'>db</span>)</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -185,7 +228,9 @@ primitive data, e.g., it does not coerce character data to factors.</p>
       
       <li><a href="#value">Value</a></li>
 
-      <li><a href="#note">Note</a></li>
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
