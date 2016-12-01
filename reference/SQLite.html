@@ -200,7 +200,31 @@ sets have been closed (and you&#39;ll get a warning message to this effect).</p>
 #&gt; Minnesota         2.7      72       66 14.9
 #&gt; Mississippi      16.1     259       44 17.1
 #&gt; Missouri          9.0     178       70 28.2
-#&gt;  [ reached getOption(&quot;max.print&quot;) -- omitted 25 rows ]</div><div class='input'>
+#&gt; Montana           6.0     109       53 16.4
+#&gt; Nebraska          4.3     102       62 16.5
+#&gt; Nevada           12.2     252       81 46.0
+#&gt; New Hampshire     2.1      57       56  9.5
+#&gt; New Jersey        7.4     159       89 18.8
+#&gt; New Mexico       11.4     285       70 32.1
+#&gt; New York         11.1     254       86 26.1
+#&gt; North Carolina   13.0     337       45 16.1
+#&gt; North Dakota      0.8      45       44  7.3
+#&gt; Ohio              7.3     120       75 21.4
+#&gt; Oklahoma          6.6     151       68 20.0
+#&gt; Oregon            4.9     159       67 29.3
+#&gt; Pennsylvania      6.3     106       72 14.9
+#&gt; Rhode Island      3.4     174       87  8.3
+#&gt; South Carolina   14.4     279       48 22.5
+#&gt; South Dakota      3.8      86       45 12.8
+#&gt; Tennessee        13.2     188       59 26.9
+#&gt; Texas            12.7     201       80 25.5
+#&gt; Utah              3.2     120       80 22.9
+#&gt; Vermont           2.2      48       32 11.2
+#&gt; Virginia          8.5     156       63 20.7
+#&gt; Washington        4.0     145       73 26.2
+#&gt; West Virginia     5.7      81       39  9.3
+#&gt; Wisconsin         2.6      53       66 10.8
+#&gt; Wyoming           6.8     161       60 15.6</div><div class='input'>
 <span class='co'># Or do it in batches</span>
 <span class='no'>rs</span> <span class='kw'>&lt;-</span> <span class='fu'>dbSendQuery</span>(<span class='no'>con</span>, <span class='st'>"SELECT * FROM USArrests"</span>)
 <span class='no'>d1</span> <span class='kw'>&lt;-</span> <span class='fu'>dbFetch</span>(<span class='no'>rs</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>)      <span class='co'># extract data in chunks of 10 rows</span>

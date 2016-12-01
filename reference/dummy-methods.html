@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Determine the SQL Data Type of an R object — dbDataType,SQLiteConnection-method • RSQLite</title>
+<title>Dummy methods — dummy-methods • RSQLite</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,43 +77,35 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Determine the SQL Data Type of an R object</h1>
+    <h1>Dummy methods</h1>
     </div>
 
     
-    <p>This method is a straight-forward implementation of the corresponding
-generic function.</p>
+    <p>Define here so that these methods can also be imported from this package.
+Recommended practice is to import all methods from <span class="pkg">DBI</span>.</p>
     
 
-    <pre><span class='co'># S4 method for SQLiteConnection</span>
-<span class='fu'>dbDataType</span>(<span class='no'>dbObj</span>, <span class='no'>obj</span>, <span class='no'>...</span>)
-
-<span class='co'># S4 method for SQLiteDriver</span>
-<span class='fu'>dbDataType</span>(<span class='no'>dbObj</span>, <span class='no'>obj</span>, <span class='no'>...</span>)</pre>
+    <pre><span class='co'># S4 method for `NULL`,ANY</span>
+<span class='fu'><a href='reexports.html'>dbGetQuery</a></span>(<span class='no'>conn</span>, <span class='no'>statement</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
-      <dt>dbObj</dt>
-      <dd>a <code>SQLiteConnection</code> or <code>SQLiteDriver</code> object</dd>
-      <dt>obj</dt>
-      <dd>an R object whose SQL type we want to determine.</dd>
+      <dt>conn</dt>
+      <dd>A <code>DBIConnection</code> object, as produced by
+<code>dbConnect()</code>.</dd>
+      <dt>statement</dt>
+      <dd>a character vector of length 1 containing SQL.</dd>
       <dt>...</dt>
-      <dd>Needed for compatibility with generic. Otherwise ignored.</dd>
+      <dd>Other parameters passed on to methods.</dd>
     </dl>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>dbDataType</span>(<span class='fu'><a href='SQLite.html'>SQLite</a></span>(), <span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] &quot;REAL&quot;</div><div class='input'><span class='fu'>dbDataType</span>(<span class='fu'><a href='SQLite.html'>SQLite</a></span>(), <span class='fl'>1L</span>)</div><div class='output co'>#&gt; [1] &quot;INTEGER&quot;</div><div class='input'><span class='fu'>dbDataType</span>(<span class='fu'><a href='SQLite.html'>SQLite</a></span>(), <span class='st'>"1"</span>)</div><div class='output co'>#&gt; [1] &quot;TEXT&quot;</div><div class='input'><span class='fu'>dbDataType</span>(<span class='fu'><a href='SQLite.html'>SQLite</a></span>(), <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] &quot;INTEGER&quot;</div><div class='input'><span class='fu'>dbDataType</span>(<span class='fu'><a href='SQLite.html'>SQLite</a></span>(), <span class='fu'>list</span>(<span class='fu'>raw</span>(<span class='fl'>1</span>)))</div><div class='output co'>#&gt; [1] &quot;BLOB&quot;</div><div class='input'>
-<span class='fu'>sapply</span>(<span class='kw'>datasets</span><span class='kw'>::</span><span class='no'>quakes</span>, <span class='no'>dbDataType</span>, <span class='kw'>dbObj</span> <span class='kw'>=</span> <span class='fu'><a href='SQLite.html'>SQLite</a></span>())</div><div class='output co'>#&gt;       lat      long     depth       mag  stations 
-#&gt;    &quot;REAL&quot;    &quot;REAL&quot; &quot;INTEGER&quot;    &quot;REAL&quot; &quot;INTEGER&quot; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>

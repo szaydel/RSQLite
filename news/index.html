@@ -82,6 +82,184 @@
     </div>
 
     <div class="contents">
+    <div id="rsqlite-1-1-2016-11-25" class="section level1">
+<h1 class="hasAnchor">
+<a href="#rsqlite-1-1-2016-11-25" class="anchor"> </a>RSQLite 1.1 (2016-11-25)</h1>
+<ul><li>New maintainer: Kirill Müller.</li>
+</ul><div id="bundled-sqlite" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bundled-sqlite" class="anchor"> </a>Bundled SQLite</h2>
+<ul><li><p>RSQLite always builds with the included source, which is located in <code>src/sqlite3</code>. This prevents bugs due to API mismatches and considerably simplifies the build process.</p></li>
+<li><p>Current version: 3.11.1.</p></li>
+<li><p>Enable JSON1 extension (#152, @tigertoes).</p></li>
+<li><p>Include support for FTS5 (@mkuhn).</p></li>
+<li><p>Compilation limits <code>SQLITE_MAX_VARIABLE_NUMBER</code> and <code>SQLITE_MAX_COLUMN</code> have been reset to the defaults. The documentation suggests setting to such high values is a bad idea.</p></li>
+<li><p>Header files for <code>sqlite3</code> are no longer installed, linking to the package is not possible anymore. Packages that require access to the low-level sqlite3 API should bundle their own copy.</p></li>
+</ul></div>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"> </a>Breaking changes</h2>
+<ul><li><p><code>RSQLite()</code> no longer automatically attaches DBI when loaded. This is to encourage you to use <code>library(DBI); dbConnect(RSQLite::SQLite())</code>.</p></li>
+<li><p>Functions that take a table name, such as <code>dbWriteTable()</code> and <code>dbReadTable()</code>, now quote the table name via <code>dbQuoteIdentifier()</code>. This means that caller-quoted names should be marked as such with <code>DBI::SQL()</code>.</p></li>
+</ul></div>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"> </a>New features</h2>
+<ul><li><p>RSQLite has been rewritten (essentially from scratch) in C++ with Rcpp. This has considerably reduced the amount of code, and allows us to take advantage of the more sophisticated memory management tools available in Rcpp. This rewrite should yield some minor performance improvements, but most importantly protect against memory leaks and crashes. It also provides a better base for future development. In particular, it is now technically possible to have multiple result sets per connection, although this feature is currently disabled (#150).</p></li>
+<li><p>You can now use SQLite’s URL specification for databases. This allows you to create <a href="https://www.sqlite.org/inmemorydb.html">shared in-memory</a> databases (#70).</p></li>
+<li><p>Queries (#69), query parameters and table data are always converted to UTF-8 before being sent to the database.</p></li>
+<li><p>Adapted to <code>DBI</code> 0.5, new code should use <code>dbExecute()</code> instead of <code><a href="../reference/reexports.html">dbGetQuery()</a></code>, and <code>dbSendStatement()</code> instead of <code>dbSendQuery()</code> where appropriate.</p></li>
+<li><p>New strategy for prepared queries. Create a prepared query with <code>dbSendQuery()</code> or <code>dbSendStatement()</code> and bind values with <code>dbBind()</code>. The same query/statement can be executed efficiently multiple times by passing a data-frame-like object (#168, #178, #181).</p></li>
+<li><p><code>dbSendQuery()</code>, <code><a href="../reference/reexports.html">dbGetQuery()</a></code>, <code>dbSendStatement()</code> and <code>dbExecute()</code> also support inline parameterised queries, like <code><a href="../reference/reexports.html">dbGetQuery(datasetsDb(), "SELECT * FROM mtcars WHERE cyl = :cyl",   params = list(cyl = 4))</a></code>. This has no performance benefits but protects you from SQL injection attacks.</p></li>
+<li><p>Improve column type inference: the first non-<code>NULL</code> value decides the type of a column (#111). If there are no non-<code>NULL</code> values, the column affinity is used, determined according to sqlite3 rules (#160).</p></li>
+<li><p><code>dbFetch()</code> uses the same row name strategy as <code>dbReadTable()</code> (#53).</p></li>
+<li><p><code>dbColumnInfo()</code> will now return information even before you’ve retrieved any data.</p></li>
+<li><p>New <code>sqliteVersion()</code> prints the header and library versions of RSQLite.</p></li>
+<li><p>Deprecation warnings are given only once, with a clear reference to the source.</p></li>
+<li><p><code><a href="../reference/datasetsDb.html">datasetsDb()</a></code> now returns a read-only database, to avoid modifications to the installed file.</p></li>
+</ul></div>
+<div id="deprecated-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#deprecated-functions" class="anchor"> </a>Deprecated functions</h2>
+<ul><li><p><code>make.db.names()</code> has been formally deprecated. Please use <code>dbQuoteIdentifier()</code> instead. This function is also used in <code>dbReadTable()</code>, <code>dbRemoveTable()</code>, and <code>dbListFields()</code> (#106, #132).</p></li>
+<li><p><code><a href="../reference/sqliteBuildTableDefinition.html">sqliteBuildTableDefinition()</a></code> has been deprecated. Use <code>DBI::sqlCreateTable()</code> instead.</p></li>
+<li><p><code>dbGetException()</code> now raises a deprecation warning and always returns <code>list(errorNum = 0L, errorMsg = "OK")</code>, because querying the last SQLite error only works if an error actually occurred (#129).</p></li>
+<li><p><code><a href="../reference/dbSendPreparedQuery.html">dbSendPreparedQuery()</a></code> and <code><a href="../reference/dbSendPreparedQuery.html">dbGetPreparedQuery()</a></code> have been reimplemented (with deprecation warning) using <code>dbSendQuery()</code>, <code>dbBind()</code> and <code>dbFetch()</code> for compatibility with existing packages (#100, #153, #168, #181). Please convert to the new API, because the old function may be removed completely very soon: They were never part of the official API, and do less argument checking than the new APIs. Both <code><a href="../reference/dbSendPreparedQuery.html">dbSendPreparedQuery()</a></code> and <code><a href="../reference/dbSendPreparedQuery.html">dbGetPreparedQuery()</a></code> ignore parameters not found in the query, with a warning (#174).</p></li>
+<li><p>Reimplemented <code>dbListResults()</code> (with deprecation warning) for compatibility with existing packages (#154).</p></li>
+<li><p>Soft-deprecated <code><a href="../reference/dbGetInfo.html">dbGetInfo()</a></code>: The “Result” method is implemented by DBI, the methods for the other classes raise a warning (#137). It’s now better to access the metadata with individual functions <code>dbHasCompleted()</code>, <code>dbGetRowCount()</code> and <code>dbGetRowsAffected()</code>.</p></li>
+<li><p>All <code>summary()</code> methods have been removed: the same information is now displayed in the <code>show()</code> methods, which were previously pretty useless.</p></li>
+</ul></div>
+<div id="compatibility-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#compatibility-fixes" class="anchor"> </a>Compatibility fixes</h2>
+<ul><li><p>The <code>raw</code> data type is supported in <code>dbWriteTable()</code>, creates a <code>TEXT</code> column with a warning (#173).</p></li>
+<li><p>Numeric values for the <code>row.names</code> argument are converted to logical, with a warning (#170).</p></li>
+<li><p>If the number of data frame columns matches the number of existing columns for <code>dbWriteTable(append = TRUE)</code>, columns will be matched by position for compatibility, with a warning in case of a name mismatch (#164).</p></li>
+<li><p><code>dbWriteTable()</code> supports the <code>field.types</code> argument when creating a new table (#171), and the <code>temporary</code> argument, default <code>FALSE</code> (#113).</p></li>
+<li><p>Reexporting <code><a href="../reference/reexports.html">dbGetQuery()</a></code> and <code><a href="../reference/reexports.html">dbDriver()</a></code> (#147, #148, #183).</p></li>
+<li><p><code><a href="../reference/sqliteCopyDatabase.html">sqliteCopyDatabase()</a></code> accepts character as <code>to</code> argument again, in this case a temporary connection is opened.</p></li>
+<li><p>Reimplemented <code>dbWriteTable("SQLiteConnection", "character", "character")</code> for import of CSV files, using a function from the old codebase (#151).</p></li>
+<li><p><code>dbWriteTable("SQLiteConnection", "character", "data.frame")</code> looks for table names already enclosed in backticks and uses these, (with a warning), for compatibility with the sqldf package.</p></li>
+</ul></div>
+<div id="performance" class="section level2">
+<h2 class="hasAnchor">
+<a href="#performance" class="anchor"> </a>Performance</h2>
+<ul><li>The <code>dbExistsTable()</code> function now works faster by filtering the list of tables using SQL (#166).</li>
+</ul></div>
+<div id="documentation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#documentation" class="anchor"> </a>Documentation</h2>
+<ul><li><p>Start on a basic vignette: <code><a href="../articles/RSQLite.html">vignette("RSQLite")</a></code> (#50).</p></li>
+<li><p>Reworked function and method documentation, removed old documentation (#121).</p></li>
+<li><p>Using <code>dbExecute()</code> in documentation and examples.</p></li>
+<li><p>Using both <code>":memory:"</code> and <code>":file::memory:"</code> in documentation.</p></li>
+<li><p>Added additional documentation and unit tests for <a href="https://www.sqlite.org/autoinc.html">autoincrement keys</a> (#119, @wibeasley).</p></li>
+</ul></div>
+<div id="internal" class="section level2">
+<h2 class="hasAnchor">
+<a href="#internal" class="anchor"> </a>Internal</h2>
+<ul><li><p>Avoid warning about missing <code>long long</code> data type in C++98 by using a compound data type built from two 32-bit integers, with static assert that the size is 8 indeed.</p></li>
+<li><p>Remove all compilation warnings.</p></li>
+<li><p>All DBI methods contain an ellipsis <code>...</code> in their signature. Only the <code>name</code> argument to the transaction methods appears before the ellipsis for compatibility reasons.</p></li>
+<li><p>Using the <code>DBItest</code> package for testing (#105), with the new <code>constructor_relax_args</code> tweak.</p></li>
+<li><p>Using the <code>plogr</code> for logging at the C++ level, can be enabled via <code>RSQLite:::init_logging()</code>.</p></li>
+<li><p>Using new <code>sqlRownamesToColumn()</code> and <code>sqlColumnToRownames()</code> (rstats-db/DBI#91).</p></li>
+<li><p>Using <code>astyle</code> for code formatting (#159), also in tests (but only if sources can be located), stripped space at end of line in all source files.</p></li>
+<li><p>Tracking dependencies between source and header files (#138).</p></li>
+<li><p>Moved all functions from headers to modules (#162).</p></li>
+<li><p>Fixed all warnings in tests (#157).</p></li>
+<li><p>Checking message wording for deprecation warnings (#157).</p></li>
+<li><p>Testing simple and named transactions (#163).</p></li>
+<li><p>Using container-based builds and development version of <code>testthat</code> on Travis.</p></li>
+<li><p>Enabled AppVeyor testing.</p></li>
+<li><p>Differential reverse dependency checks.</p></li>
+<li><p>Added upgrade script for sqlite3 sources and creation script for the datasets database to the <code>data-raw</code> directory.</p></li>
+</ul></div>
+</div>
+    <div id="version-1-0-0" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-1-0-0" class="anchor"> </a>Version 1.0.0</h1>
+<div id="new-features-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-1" class="anchor"> </a>New features</h2>
+<ul><li><p>Updated to SQLite 3.8.6</p></li>
+<li><p>Added <code><a href="../reference/datasetsDb.html">datasetsDb()</a></code>, a bundled SQLite database containing all data frames in the datasets package (#15).</p></li>
+<li><p>Inlined <code>RSQLite.extfuns</code> - use <code><a href="../reference/initExtension.html">initExtension()</a></code> to load the many useful extension functions (#44).</p></li>
+<li><p>Methods no longer automatically clone the connection if there is an open result set. This was implement inconsistently in a handful of places (#22). RSQLite is now more forgiving if you forget to close a result set - it will close it for you, with a warning. It’s still good practice to clean up after yourself, but you don’t have to.</p></li>
+<li><p><code>dbBegin()</code>, <code>dbCommit()</code>, <code>dbRollback()</code> throw errors on failure, rather than return <code>FALSE</code>. They all gain a <code>name</code> argument to specify named savepoints.</p></li>
+<li><p><code>dbFetch()</code> method added (<code>fetch()</code> will be deprecated in the future)</p></li>
+<li><p><code>dbRemoveTable()</code> throws errors on failure, rather than returning <code>FALSE</code>.</p></li>
+<li>
+<p><code>dbWriteTable()</code> has been rewritten:</p>
+<ul><li><p>It quotes field names using <code>dbQuoteIdentifier()</code>, rather than use a flawed black-list based approach with name munging.</p></li>
+<li><p>It now throws errors on failure, rather than returning FALSE.</p></li>
+<li><p>It will automatically add row names only if they are character, not integer.</p></li>
+<li><p>When loading a file from disk, <code>dbWriteTable()</code> will no longer attempt to guess the correct values for <code>row.names</code> and <code>header</code> - instead supply them explicitly if the defaults are incorrect.</p></li>
+<li><p>It uses named save points so it can be nested inside other transactions (#41).</p></li>
+<li><p>When given a zero-row data frame it will just creates the table definition (#35).</p></li>
+</ul></li>
+</ul></div>
+<div id="changes-to-objects" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-objects" class="anchor"> </a>Changes to objects</h2>
+<ul><li>The <code>dbname</code>, <code>loadable.extensions</code>, <code>flags</code> and <code>vfs</code> properties of a SqliteConnection are now slots. Access them directly instead of using <code><a href="../reference/dbGetInfo.html">dbGetInfo()</a></code>.</li>
+</ul></div>
+<div id="deprecated-and-removed-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#deprecated-and-removed-functions" class="anchor"> </a>Deprecated and removed functions</h2>
+<ul><li><p>RSQLite is no longer nominally compatible with S (#39).</p></li>
+<li><p><code>idIsValid()</code> is deprecated. Please use <code>dbIsValid()</code> instead.</p></li>
+<li><p><code><a href="../reference/dbBeginTransaction.html">dbBeginTransaction()</a></code> has been deprecated. Please use <code>dbBegin()</code> instead.</p></li>
+<li><p><code>dbCallProc()</code> method removed, since generic is now deprecated.</p></li>
+<li><p>Renamed <code><a href="../reference/sqliteBuildTableDefinition.html">dbBuildTableDefinition()</a></code> to <code><a href="../reference/sqliteBuildTableDefinition.html">sqliteBuildTableDefinition()</a></code> to avoid implying it’s a DBI generic. Old function is aliased to new with a warning.</p></li>
+<li><p><code>dbFetch()</code> no longer numbers row names sequentially between fetches.</p></li>
+<li><p><code>safe.write()</code> is no longer exported as it shouldn’t be part of the public RSQLite interface (#26).</p></li>
+<li><p>Internal <code>sqlite*()</code> functions are no longer exported (#20).</p></li>
+<li><p>Removed <code>SqliteObject</code> and <code>dbObject</code> classes, modifying <code>SqliteDriver</code>, <code>SqliteConnection</code>, and <code>SqliteResult</code> to use composition instead of multiple inheritance.</p></li>
+</ul></div>
+</div>
+    <div id="version-0-11-6" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-11-6" class="anchor"> </a>Version 0.11.6</h1>
+<ul><li>Upgrade to SQLite 3.8.4.2</li>
+</ul></div>
+    <div id="version-0-11-5" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-11-5" class="anchor"> </a>Version 0.11.5</h1>
+<ul><li><p>Include temporary tables in dbListTables()</p></li>
+<li><p>Added Rstudio project file</p></li>
+<li><p>Added select.cols capability to sqliteReadTable()</p></li>
+</ul></div>
+    <div id="version-0-11-4" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-11-4" class="anchor"> </a>Version 0.11.4</h1>
+<ul><li><p>Upgrade to SQLite 3.7.7</p></li>
+<li><p>Fix bug in dbWriteTable preventing use of colClasses argument from being used to control input types.</p></li>
+</ul></div>
+    <div id="version-0-11-3" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-11-3" class="anchor"> </a>Version 0.11.3</h1>
+<ul><li>Upgrade to SQLite 3.7.16.2</li>
+</ul></div>
+    <div id="version-0-11-2" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-11-2" class="anchor"> </a>Version 0.11.2</h1>
+<ul><li>Upgrade to SQLite 3.7.14</li>
+</ul></div>
+    <div id="version-0-11-1" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-11-1" class="anchor"> </a>Version 0.11.1</h1>
+<ul><li>Prevent RSQLite from crashing R when operations are attempted on expired (closed) connections.</li>
+</ul></div>
+    <div id="version-0-11-0" class="section level1">
+<h1 class="hasAnchor">
+<a href="#version-0-11-0" class="anchor"> </a>Version 0.11.0</h1>
+<ul><li><p>Enhance type detection in sqliteDataType (dbDataType). The storage mode of a data.frame column is now used as part of the type detection. Prior to this patch, all vectors with class other than numeric or logical were mapped to a TEXT column. This patch uses the output of storage.mode to map to integer and double vectors to INTEGER and REAL columns, respectively. All other modes are mapped to a TEXT column.</p></li>
+<li><p>Detection of BLOBs was narrowed slightly. The code now treats only objects with data.class(obj) == “list” as BLOBs. Previously, is.list was used which could return TRUE for lists of various classes.</p></li>
+<li><p>Fix bug in sqliteImportFile (used by dbWriteTable) that prevented a comment character from being specified for the input file.</p></li>
+<li><p>Increase compile-time SQLite limits for maximum number of columns in a table to 30000 and maximum number of parameters (?N) in a SELECT to 40000. Use of wide tables is not encouraged. The default values for SQLite are 2000 and 999, respectively. Databases containing tables with more than 2000 columns may not be compatible with versions of SQLite compiled with default settings.</p></li>
+<li><p>Upgrade to SQLite 3.7.9.</p></li>
+</ul></div>
     <div id="version-0-10-0" class="section level1">
 <h1 class="hasAnchor">
 <a href="#version-0-10-0" class="anchor"> </a>Version 0.10.0</h1>
@@ -118,7 +296,14 @@
 <h1 class="hasAnchor">
 <a href="#version-0-9-0" class="anchor"> </a>Version 0.9-0</h1>
 <ul><li><p>The SQLite driver handle validation code, is_ValidHandle, no longer requires the driver ID to be equal to the current process ID. SQLite supports multiple processes accessing the same SQLite file via locking (however, results are known to be unreliable on NFS). This change should make using RSQLite with the multicore package easier. For an example of the issue that the PID check causes see: <a href="https://stat.ethz.ch/pipermail/r-sig-hpc/2009-August/000335.html" class="uri">https://stat.ethz.ch/pipermail/r-sig-hpc/2009-August/000335.html</a></p></li>
-<li><p>Refactor to use external pointers to wrap handle IDs; remove handle ID coerce code (e.g. as(<a href="mailto:obj@Id">obj@Id</a>, “integer”)). For now, the old scheme of storing handle IDs in an integer vector is mostly maintained only these integer vectors are stored in the protection slot of an external pointer. Using external pointers will allow the use of finalizer code so that, for example, unreferenced result sets can be cleaned up.</p></li>
+<li>
+<p>Refactor to use external pointers to wrap handle IDs; remove handle ID coerce code (e.g. as(<script type="text/javascript"><![CDATA[
+<!--
+h='&#x49;&#100;';a='&#64;';n='&#x6f;&#98;&#106;';e=n+a+h;
+document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+e+'<\/'+'a'+'>');
+// -->
+]]></script></p>
+<noscript>obj at Id</noscript>, “integer”)). For now, the old scheme of storing handle IDs in an integer vector is mostly maintained only these integer vectors are stored in the protection slot of an external pointer. Using external pointers will allow the use of finalizer code so that, for example, unreferenced result sets can be cleaned up.</li>
 <li><p>Upgrade to SQLite 3.6.23.1.</p></li>
 <li>
 <p>The memory mangement code for keeping track of database connections was significantly refactored. Instead of tracking connections in a pre-allocated array attached to the driver manager, connections are now managed dynamically using R’s external pointers and finalizers. Consequences of this change are as follows:</p>
@@ -202,7 +387,14 @@
 <a href="#version-0-4-11" class="anchor"> </a>Version 0.4-11</h1>
 <ul><li><p>Implemented dbCommit() and dbRollback(). There is also a new generic method dbBeginTransaction(), which begins a transaction. Note that this is an extension to the DBI interface.</p></li>
 <li><p>Update to the SQLite 3 API for fetching records. This means that the records are pulled from the database as required, and not cached in memory as was previously done.</p></li>
-<li><p>Added generic methods dbSendPreparedQuery() and dbGetPreparedQuery() which are similiar to dbSendQuery() and dbGetQuery(), but take an extra “bind.data” parameter, which is a data frame. The statement is assumed to contain bind variables. Bind variables are either for a column name (“:name” or <a href="mailto:%22@name%22">"@name"</a>) or for a column index (“?”) in the data frame. See <a href="http://sqlite.org/capi3ref.html" class="uri">http://sqlite.org/capi3ref.html</a> for more details.</p></li>
+<li>
+<p>Added generic methods dbSendPreparedQuery() and dbGetPreparedQuery() which are similiar to dbSendQuery() and dbGetQuery(), but take an extra “bind.data” parameter, which is a data frame. The statement is assumed to contain bind variables. Bind variables are either for a column name (“:name” or <script type="text/javascript"><![CDATA[
+<!--
+h='&#110;&#x61;&#x6d;&#x65;&#x25;&#50;&#50;';a='&#64;';n='&#x25;&#50;&#50;';e=n+a+h;
+document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+'&#34;&#64;&#110;&#x61;&#x6d;&#x65;&#34;'+'<\/'+'a'+'>');
+// -->
+]]></script></p>
+<noscript>"@name" (%22 at name%22)</noscript>) or for a column index (“?”) in the data frame. See <a href="http://sqlite.org/capi3ref.html" class="uri">http://sqlite.org/capi3ref.html</a> for more details.</li>
 </ul><p>dbGetPreparedQuery(con, “INSERT INTO table1 VALUES (:col1)”, data.frame(col1=c(1, 2)) )</p>
 <p>Each bind variable in the query has to be bound only once, either via named or positional parameters. If it is not bound or is bound more than once (due to a mix or positional/named parameters) an error is thrown. Any extra columns in the data frame are ignored.</p>
 <p>If you are having a lot of string parameters, use stringsAsFactors=FALSE when creating the bind.data data.frame instance. You can also use I().</p>
@@ -289,14 +481,6 @@
 <a href="#version-0-1-1" class="anchor"> </a>Version 0.1-1</h1>
 <ul><li>First implementation – used the RS-DBI.[ch] code (which is the core connection/cursor manager) “as is” and modified the RS-MySQL.[hc], (which sits directly on top of the MySQL C API) and replace the MySQL API calls with SQLite API calls. This was pretty easy, except for the fact that the SQLite API is so minimal (3, yes, 3 C functions) with no support for connections, result set (cursors), data types, meta-data – nothing. So I had to simulate all this. (Actually it wasn’t too bad).</li>
 </ul></div>
-    NA
-    NA
-    NA
-    NA
-    NA
-    NA
-    NA
-    NA
     </div>
   </div>
 
@@ -304,6 +488,15 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#rsqlite-1-1-2016-11-25">1.1</a></li>
+        <li><a href="#version-1-0-0">1.0.0</a></li>
+        <li><a href="#version-0-11-6">0.11.6</a></li>
+        <li><a href="#version-0-11-5">0.11.5</a></li>
+        <li><a href="#version-0-11-4">0.11.4</a></li>
+        <li><a href="#version-0-11-3">0.11.3</a></li>
+        <li><a href="#version-0-11-2">0.11.2</a></li>
+        <li><a href="#version-0-11-1">0.11.1</a></li>
+        <li><a href="#version-0-11-0">0.11.0</a></li>
         <li><a href="#version-0-10-0">0.10.0</a></li>
         <li><a href="#version-0-9-5">0.9-5</a></li>
         <li><a href="#version-0-9-4">0.9-4</a></li>
@@ -332,14 +525,6 @@
         <li><a href="#version-0-3-1">0.3-1</a></li>
         <li><a href="#version-0-2-1">0.2-1</a></li>
         <li><a href="#version-0-1-1">0.1-1</a></li>
-        <li><a href="#NA">NA</a></li>
-        <li><a href="#NA">NA</a></li>
-        <li><a href="#NA">NA</a></li>
-        <li><a href="#NA">NA</a></li>
-        <li><a href="#NA">NA</a></li>
-        <li><a href="#NA">NA</a></li>
-        <li><a href="#NA">NA</a></li>
-        <li><a href="#NA">NA</a></li>
       </ul>
     </div>
   </div>
