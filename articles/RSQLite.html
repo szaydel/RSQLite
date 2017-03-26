@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RSQLite • RSQLite</title>
-<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><!-- mathjax --><script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -60,7 +60,7 @@
       <h1>RSQLite</h1>
                         <h4 class="author">Hadley Wickham</h4>
             
-            <h4 class="date">2017-01-19</h4>
+            <h4 class="date">2017-03-26</h4>
           </div>
 
     
@@ -71,32 +71,28 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DBI)</code></pre></div>
 <div id="creating-a-new-database" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#creating-a-new-database" class="anchor"> </a></body></html>Creating a new database</h2>
+<a href="#creating-a-new-database" class="anchor"></a>Creating a new database</h2>
 <p>To create a new SQLite database, you simply supply the filename to <code>dbConnect()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mydb &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite::<span class="kw"><a href="../reference/SQLite.html">SQLite</a></span>(), <span class="st">"my-db.sqlite"</span>)
 <span class="kw">dbDisconnect</span>(mydb)
-<span class="co">#&gt; [1] TRUE</span>
 <span class="kw">unlink</span>(<span class="st">"my-db.sqlite"</span>)</code></pre></div>
 <p>If you just need a temporary database, use either <code>""</code> (for an on-disk database) or <code>":memory:"</code> or <code>"file::memory:"</code> (for a in-memory database). This database will be automatically deleted when you disconnect from it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mydb &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite::<span class="kw"><a href="../reference/SQLite.html">SQLite</a></span>(), <span class="st">""</span>)
-<span class="kw">dbDisconnect</span>(mydb)
-<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<span class="kw">dbDisconnect</span>(mydb)</code></pre></div>
 </div>
 <div id="loading-data" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#loading-data" class="anchor"> </a></body></html>Loading data</h2>
+<a href="#loading-data" class="anchor"></a>Loading data</h2>
 <p>You can easily copy an R data frame into a SQLite database with <code>dbWriteTable()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mydb &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite::<span class="kw"><a href="../reference/SQLite.html">SQLite</a></span>(), <span class="st">""</span>)
 <span class="kw">dbWriteTable</span>(mydb, <span class="st">"mtcars"</span>, mtcars)
-<span class="co">#&gt; [1] TRUE</span>
 <span class="kw">dbWriteTable</span>(mydb, <span class="st">"iris"</span>, iris)
-<span class="co">#&gt; [1] TRUE</span>
 <span class="kw">dbListTables</span>(mydb)
 <span class="co">#&gt; [1] "iris"   "mtcars"</span></code></pre></div>
 </div>
 <div id="queries" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#queries" class="anchor"> </a></body></html>Queries</h2>
+<a href="#queries" class="anchor"></a>Queries</h2>
 <p>Issue a query with <code><a href="../reference/reexports.html">dbGetQuery()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/reexports.html">dbGetQuery</a></span>(mydb, <span class="st">'SELECT * FROM mtcars LIMIT 5'</span>)
 <span class="co">#&gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span>
@@ -126,7 +122,7 @@
 </div>
 <div id="batched-queries" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#batched-queries" class="anchor"> </a></body></html>Batched queries</h2>
+<a href="#batched-queries" class="anchor"></a>Batched queries</h2>
 <p>If you run a query and the results don’t fit in memory, you can use <code>dbSendQuery()</code>, <code>dbFetch()</code> and <code>dbClearResults()</code> to retrieve the results in batches. By default <code>dbFetch()</code> will retrieve all available rows: use <code>n</code> to set the maximum number of rows to return.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(mydb, <span class="st">'SELECT * FROM mtcars'</span>)
 while (!<span class="kw">dbHasCompleted</span>(rs)) {
@@ -137,12 +133,11 @@ while (!<span class="kw">dbHasCompleted</span>(rs)) {
 <span class="co">#&gt; [1] 10</span>
 <span class="co">#&gt; [1] 10</span>
 <span class="co">#&gt; [1] 2</span>
-<span class="kw">dbClearResult</span>(rs)
-<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<span class="kw">dbClearResult</span>(rs)</code></pre></div>
 </div>
 <div id="multiple-parameterised-queries" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#multiple-parameterised-queries" class="anchor"> </a></body></html>Multiple parameterised queries</h2>
+<a href="#multiple-parameterised-queries" class="anchor"></a>Multiple parameterised queries</h2>
 <p>You can use the same approach to run the same parameterised query with different parameters. Call <code>dbBind()</code> to set the parameters:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(mydb, <span class="st">'SELECT * FROM iris WHERE "Sepal.Length" &lt; :x'</span>)
 <span class="kw">dbBind</span>(rs, <span class="dt">param =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="fl">4.5</span>))
@@ -151,19 +146,17 @@ while (!<span class="kw">dbHasCompleted</span>(rs)) {
 <span class="kw">dbBind</span>(rs, <span class="dt">param =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="dv">4</span>))
 <span class="kw">nrow</span>(<span class="kw">dbFetch</span>(rs))
 <span class="co">#&gt; [1] 0</span>
-<span class="kw">dbClearResult</span>(rs)
-<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<span class="kw">dbClearResult</span>(rs)</code></pre></div>
 <p>You can also pass multiple parameters in one call to <code>dbBind()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rs &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(mydb, <span class="st">'SELECT * FROM iris WHERE "Sepal.Length" = :x'</span>)
 <span class="kw">dbBind</span>(rs, <span class="dt">param =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="kw">seq</span>(<span class="dv">4</span>, <span class="fl">4.4</span>, <span class="dt">by =</span> <span class="fl">0.1</span>)))
 <span class="kw">nrow</span>(<span class="kw">dbFetch</span>(rs))
 <span class="co">#&gt; [1] 4</span>
-<span class="kw">dbClearResult</span>(rs)
-<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<span class="kw">dbClearResult</span>(rs)</code></pre></div>
 </div>
 <div id="statements" class="section level2">
 <h2 class="hasAnchor">
-<html><body><a href="#statements" class="anchor"> </a></body></html>Statements</h2>
+<a href="#statements" class="anchor"></a>Statements</h2>
 <p>DBI has new functions <code>dbSendStatement()</code> and <code>dbExecute()</code>, which are the counterparts of <code>dbSendQuery()</code> and <code><a href="../reference/reexports.html">dbGetQuery()</a></code> for SQL statements that do not return a tabular result, such as inserting records into a table, updating a table, or setting engine parameters. It is good practice, although currently not enforced, to use the new functions when you don’t expect a result.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dbExecute</span>(mydb, <span class="st">'DELETE FROM iris WHERE "Sepal.Length" &lt; 4'</span>)
 <span class="co">#&gt; [1] 0</span>
@@ -171,8 +164,7 @@ rs &lt;-<span class="st"> </span><span class="kw">dbSendStatement</span>(mydb, <
 <span class="kw">dbBind</span>(rs, <span class="dt">param =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="fl">4.5</span>))
 <span class="kw">dbGetRowsAffected</span>(rs)
 <span class="co">#&gt; [1] 4</span>
-<span class="kw">dbClearResult</span>(rs)
-<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<span class="kw">dbClearResult</span>(rs)</code></pre></div>
 </div>
 </div>
   </div>
