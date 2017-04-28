@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Class SQLiteConnection — SQLiteConnection-class • RSQLite</title>
+<title>Class SQLiteConnection (and methods) — SQLiteConnection-class • RSQLite</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,7 +25,7 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -79,29 +79,69 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Class SQLiteConnection</h1>
+    <h1>Class SQLiteConnection (and methods)</h1>
     </div>
 
     
-    <p><code>SQLiteConnection</code> objects are usually created by
-<code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbConnect'>DBI::dbConnect()</a></code>.</p>
+    <p>SQLiteConnection objects are created by passing <code><a href='SQLite.html'>SQLite()</a></code> as first
+argument to <code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbConnect'>DBI::dbConnect()</a></code>.
+They are a superclass of the DBIConnection class.
+The "Usage" section lists the class methods overridden by <span class="pkg">RSQLite</span>.</p>
     
 
-    <pre><span class='co'># S4 method for SQLiteConnection</span>
+    <pre class="usage"><span class='co'># S4 method for SQLiteConnection,character</span>
+<span class='fu'>dbQuoteIdentifier</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for SQLiteConnection,SQL</span>
+<span class='fu'>dbQuoteIdentifier</span>(<span class='no'>conn</span>, <span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for SQLiteConnection</span>
 <span class='fu'>show</span>(<span class='no'>object</span>)
 
 <span class='co'># S4 method for SQLiteConnection</span>
 <span class='fu'>dbIsValid</span>(<span class='no'>dbObj</span>, <span class='no'>...</span>)
 
 <span class='co'># S4 method for SQLiteConnection</span>
-<span class='fu'>dbGetException</span>(<span class='no'>conn</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>dbGetException</span>(<span class='no'>conn</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for SQLiteConnection,character</span>
+<span class='fu'>dbSendQuery</span>(<span class='no'>conn</span>, <span class='no'>statement</span>,
+  <span class='kw'>params</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for SQLiteConnection</span>
+<span class='fu'>sqlData</span>(<span class='no'>con</span>, <span class='no'>value</span>, <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for SQLiteConnection,character</span>
+<span class='fu'>dbRemoveTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for SQLiteConnection,character</span>
+<span class='fu'>dbExistsTable</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for SQLiteConnection</span>
+<span class='fu'>dbListTables</span>(<span class='no'>conn</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for SQLiteConnection,character</span>
+<span class='fu'>dbListFields</span>(<span class='no'>conn</span>, <span class='no'>name</span>, <span class='no'>...</span>)
+
+<span class='co'># S4 method for SQLiteConnection</span>
+<span class='fu'>dbDataType</span>(<span class='no'>dbObj</span>, <span class='no'>obj</span>, <span class='no'>...</span>)</pre>
         
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p>The corresponding generic functions
+<code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbSendQuery'>DBI::dbSendQuery()</a></code>, <code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbGetQuery'>DBI::dbGetQuery()</a></code>,
+<code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbSendStatement'>DBI::dbSendStatement()</a></code>, <code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbExecute'>DBI::dbExecute()</a></code>,
+<code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbExistsTable'>DBI::dbExistsTable()</a></code>, <code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbListTables'>DBI::dbListTables()</a></code>, <code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbListFields'>DBI::dbListFields()</a></code>,
+<code><a href='http://www.rdocumentation.org/packages/DBI/topics/dbRemoveTable'>DBI::dbRemoveTable()</a></code>, and <code><a href='http://www.rdocumentation.org/packages/DBI/topics/sqlData'>DBI::sqlData()</a></code>.</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      
+      <li><a href="#see-also">See also</a></li>
+          </ul>
 
   </div>
 </div>

@@ -25,7 +25,7 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -84,6 +84,48 @@
     </div>
 
     <div class="contents">
+    <div id="rsqlite-1-1-14-2017-04-28" class="section level2">
+<h2 class="hasAnchor">
+<a href="#rsqlite-1-1-14-2017-04-28" class="anchor"></a>RSQLite 1.1-14 (2017-04-28)</h2>
+<ul>
+<li>C++ code now compiles with strict compiler settings <code>-Wall -Wextra -pedantic -Wconversion</code>.</li>
+<li>All methods of DBI are reexported.</li>
+<li>
+<code>dbGetRowsAffected()</code> now returns <code>NA</code> for a statement with placeholders, if <code>dbBind()</code> has not been called.</li>
+<li>Use UTF-8 encoded file names as required by the SQLite API, to support non-ASCII file names (#211).</li>
+<li>Calling <code>dbFetch(n = 0)</code> instead of <code>dbFetch(n = 1)</code> in <code>dbListFields()</code>.</li>
+<li>Remove redundant documentation, link to <code>DBI</code> more prominently (#186).</li>
+<li>Remove redundant reexports of <code>dbDriver()</code> and <code>dbGetQuery()</code>.</li>
+<li>The <code>name</code> argument to <code>dbBegin()</code>, <code>dbCommit()</code>, and <code>dbRollback()</code> is now declared after the ellipsis. Code that calls these methods with an unnamed second argument still works but receives a warning (#208).</li>
+<li>If a column contains incompatible values (e.g., numbers and strings), a warning is raised in <code>dbFetch()</code> (#161).</li>
+<li>Now returning objects of type <code>blob</code> for blobs (#189).</li>
+<li>Fix Travis errors.</li>
+<li>The <code>select.cols</code> argument to <code>dbReadTable()</code> is deprecated, use <code>dbGetQuery()</code> with a <code>SELECT</code> query instead (#185).</li>
+<li>SQLite collects additional histogram data during <code>ANALYZE</code>, which may lead to faster executions of queries (#124).</li>
+<li>Failing to set <code>PRAGMA cache_size</code> or <code>PRAGMA synchronous</code> in <code>dbConnect()</code> now gives a clear warning (#197).</li>
+<li>Fix <code>dbBind()</code> behavior and tests. Attempting to bind to a query without parameters throws an error (#114).</li>
+<li>The methods related to tables (<code>dbReadTable()</code>, <code>dbWriteTable()</code>, <code>dbExistsTable()</code>, and <code>dbRemoveTable()</code>) always treat the <code>name</code> argument as literal name, even if it contains backticks. This breaks the CRAN version (but not the GitHub version) of the sqldf package (#188).</li>
+<li>Identifiers are now escaped with backticks, to avoid ambiguous handling of double quotes in the context of strings (#123).</li>
+<li>Fix corner case when repeatedly fetching from columns that don’t have an affinity.</li>
+<li>Registering native functions, as required by R &gt;= 3.4.0.</li>
+<li>Improve warning message if named parameters are not used in <code><a href="../reference/query-dep.html">dbGetPreparedQuery()</a></code> or <code><a href="../reference/query-dep.html">dbSendPreparedQuery()</a></code> (#193).</li>
+</ul>
+</div>
+    <div id="rsqlite-1-1-13-2017-04-03" class="section level2">
+<h2 class="hasAnchor">
+<a href="#rsqlite-1-1-13-2017-04-03" class="anchor"></a>RSQLite 1.1-13 (2017-04-03)</h2>
+<ul>
+<li>
+<code>dbWriteTable(append = TRUE)</code> raises an error if column names are not the same in the data and the existing table (#165).</li>
+<li>Removed dummy <code>dbGetQuery()</code> method introduced for compatibility with some Bioconductor packages (#187).</li>
+<li>The <code>variance()</code> and <code>stdev()</code> extension functions now return <code>NULL</code> for input of length 1 (#201).</li>
+<li>Exclude SQLite3 source code from coverage computation again (#204).</li>
+<li>
+<code>sqlData()</code> now returns quoted strings, like the default implementation in DBI (#207).</li>
+<li>Restore compatibility with older compilers/libraries by using &lt;boost/limits.hpp&gt; (#206).</li>
+<li>Remove <code>Makevars.local</code> logic, resolve installation issues with non-GNU Make (#203).</li>
+</ul>
+</div>
     <div id="rsqlite-1-1-12-2017-03-26" class="section level2">
 <h2 class="hasAnchor">
 <a href="#rsqlite-1-1-12-2017-03-26" class="anchor"></a>RSQLite 1.1-12 (2017-03-26)</h2>
@@ -149,7 +191,7 @@
 <h2 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
 <ul>
-<li><p><code>RSQLite()</code> no longer automatically attaches DBI when loaded. This is to encourage you to use <code>library(DBI); dbConnect(RSQLite::SQLite())</code>.</p></li>
+<li><p><code><a href="../reference/SQLite.html">RSQLite()</a></code> no longer automatically attaches DBI when loaded. This is to encourage you to use <code>library(DBI); dbConnect(RSQLite::SQLite())</code>.</p></li>
 <li><p>Functions that take a table name, such as <code>dbWriteTable()</code> and <code>dbReadTable()</code>, now quote the table name via <code>dbQuoteIdentifier()</code>. This means that caller-quoted names should be marked as such with <code>DBI::SQL()</code>.</p></li>
 </ul>
 </div>
@@ -160,9 +202,9 @@
 <li><p>RSQLite has been rewritten (essentially from scratch) in C++ with Rcpp. This has considerably reduced the amount of code, and allows us to take advantage of the more sophisticated memory management tools available in Rcpp. This rewrite should yield some minor performance improvements, but most importantly protect against memory leaks and crashes. It also provides a better base for future development. In particular, it is now technically possible to have multiple result sets per connection, although this feature is currently disabled (#150).</p></li>
 <li><p>You can now use SQLite’s URL specification for databases. This allows you to create <a href="https://www.sqlite.org/inmemorydb.html">shared in-memory</a> databases (#70).</p></li>
 <li><p>Queries (#69), query parameters and table data are always converted to UTF-8 before being sent to the database.</p></li>
-<li><p>Adapted to <code>DBI</code> 0.5, new code should use <code>dbExecute()</code> instead of <code><a href="../reference/reexports.html">dbGetQuery()</a></code>, and <code>dbSendStatement()</code> instead of <code>dbSendQuery()</code> where appropriate.</p></li>
+<li><p>Adapted to <code>DBI</code> 0.5, new code should use <code>dbExecute()</code> instead of <code>dbGetQuery()</code>, and <code>dbSendStatement()</code> instead of <code>dbSendQuery()</code> where appropriate.</p></li>
 <li><p>New strategy for prepared queries. Create a prepared query with <code>dbSendQuery()</code> or <code>dbSendStatement()</code> and bind values with <code>dbBind()</code>. The same query/statement can be executed efficiently multiple times by passing a data-frame-like object (#168, #178, #181).</p></li>
-<li><p><code>dbSendQuery()</code>, <code><a href="../reference/reexports.html">dbGetQuery()</a></code>, <code>dbSendStatement()</code> and <code>dbExecute()</code> also support inline parameterised queries, like <code><a href="../reference/reexports.html">dbGetQuery(datasetsDb(), "SELECT * FROM mtcars WHERE cyl = :cyl",   params = list(cyl = 4))</a></code>. This has no performance benefits but protects you from SQL injection attacks.</p></li>
+<li><p><code>dbSendQuery()</code>, <code>dbGetQuery()</code>, <code>dbSendStatement()</code> and <code>dbExecute()</code> also support inline parameterised queries, like <code>dbGetQuery(datasetsDb(), "SELECT * FROM mtcars WHERE cyl = :cyl",   params = list(cyl = 4))</code>. This has no performance benefits but protects you from SQL injection attacks.</p></li>
 <li><p>Improve column type inference: the first non-<code>NULL</code> value decides the type of a column (#111). If there are no non-<code>NULL</code> values, the column affinity is used, determined according to sqlite3 rules (#160).</p></li>
 <li><p><code>dbFetch()</code> uses the same row name strategy as <code>dbReadTable()</code> (#53).</p></li>
 <li><p><code>dbColumnInfo()</code> will now return information even before you’ve retrieved any data.</p></li>
@@ -192,7 +234,7 @@
 <li><p>Numeric values for the <code>row.names</code> argument are converted to logical, with a warning (#170).</p></li>
 <li><p>If the number of data frame columns matches the number of existing columns for <code>dbWriteTable(append = TRUE)</code>, columns will be matched by position for compatibility, with a warning in case of a name mismatch (#164).</p></li>
 <li><p><code>dbWriteTable()</code> supports the <code>field.types</code> argument when creating a new table (#171), and the <code>temporary</code> argument, default <code>FALSE</code> (#113).</p></li>
-<li><p>Reexporting <code><a href="../reference/reexports.html">dbGetQuery()</a></code> and <code><a href="../reference/reexports.html">dbDriver()</a></code> (#147, #148, #183).</p></li>
+<li><p>Reexporting <code>dbGetQuery()</code> and <code>dbDriver()</code> (#147, #148, #183).</p></li>
 <li><p><code><a href="../reference/sqliteCopyDatabase.html">sqliteCopyDatabase()</a></code> accepts character as <code>to</code> argument again, in this case a temporary connection is opened.</p></li>
 <li><p>Reimplemented <code>dbWriteTable("SQLiteConnection", "character", "character")</code> for import of CSV files, using a function from the old codebase (#151).</p></li>
 <li><p><code>dbWriteTable("SQLiteConnection", "character", "data.frame")</code> looks for table names already enclosed in backticks and uses these, (with a warning), for compatibility with the sqldf package.</p></li>
@@ -635,6 +677,8 @@ document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+'&#34
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#rsqlite-1-1-14-2017-04-28">1.1-14</a></li>
+        <li><a href="#rsqlite-1-1-13-2017-04-03">1.1-13</a></li>
         <li><a href="#rsqlite-1-1-12-2017-03-26">1.1-12</a></li>
         <li><a href="#rsqlite-1-1-11-2017-02-01">1.1-11</a></li>
         <li><a href="#rsqlite-1-1-10-2017-01-19">1.1-10</a></li>

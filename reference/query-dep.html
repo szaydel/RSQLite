@@ -25,7 +25,7 @@
 <script src="../pkgdown.js"></script>
 
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -84,11 +84,11 @@
 
     
     <p>These functions have been deprecated. Please switch to using
-<code>dbSendQuery()</code>/<code><a href='reexports.html'>dbGetQuery()</a></code> with the <code>params</code> argument
+<code>dbSendQuery()</code>/<code>dbGetQuery()</code> with the <code>params</code> argument
 or with calling <code>dbBind()</code> instead.</p>
     
 
-    <pre><span class='fu'>dbSendPreparedQuery</span>(<span class='no'>conn</span>, <span class='no'>statement</span>, <span class='no'>bind.data</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>dbSendPreparedQuery</span>(<span class='no'>conn</span>, <span class='no'>statement</span>, <span class='no'>bind.data</span>, <span class='no'>...</span>)
 
 <span class='fu'>dbGetPreparedQuery</span>(<span class='no'>conn</span>, <span class='no'>statement</span>, <span class='no'>bind.data</span>, <span class='no'>...</span>)
 
